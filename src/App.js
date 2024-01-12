@@ -1,6 +1,5 @@
 import logo from './logo.svg';
 import './App.css';
-import { getTokenFromUrl } from './spotify';
 
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
 const REDIRECT_URI = "https://localhost:3001"
