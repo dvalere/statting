@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import {useEffect, useState} from 'react';
+import axios from 'axios';
+
 
 
 function App() {
@@ -9,6 +11,9 @@ function App() {
   const CLIENT_ID = "0d1f0eb1410845f5a0ffdc1639baba7f"
   const RESPONSE_TYPE = "token"
   const [token, setToken] = useState("")
+
+  const [searchKey, setSearchKey] = useState("")
+  const [artists, setArtists] = useState([])
 
   useEffect(() => {
     const hash = window.location.hash
@@ -30,6 +35,26 @@ const logout = () => {
   window.localStorage.removeItem("token")
 }
 
+const searchArtists = async (e) => {
+  e.preventDefault()
+  const {data} = await axios.get("https://api.spotify.com/v1/search", {
+      headers: {
+          Authorization: `Bearer ${token}`
+      },
+      params: {
+          q: searchKey,
+          type: "artist"
+      }
+  })
+
+  setArtists(data.artists.items)
+}
+
+<form onSubmit={searchArtists}>
+    <input type="text" onChange={e => setSearchKey(e.target.value)}/>
+    <button type={"submit"}>Search</button>
+</form>
+
   return (
     <div className="App">
       <header className="App-header">
@@ -37,6 +62,7 @@ const logout = () => {
       </header>
     </div>
   );
+
 }
 
 export default App;
